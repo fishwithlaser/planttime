@@ -15,11 +15,9 @@ class EcSensor:
             offset: Calibration offset
             temp_c: Temperature for compensation (default 25°C)
         """
-        import adafruit_ads1x15.analog_in as AnalogIn
-        import adafruit_ads1x15.ads1115 as ADS
+        from adafruit_ads1x15.analog_in import AnalogIn
 
-        channels = [ADS.P0, ADS.P1, ADS.P2, ADS.P3]
-        self.analog_in = AnalogIn.AnalogIn(adc, channels[channel])
+        self.analog_in = AnalogIn(adc, channel)
         self.k = k
         self.offset = offset
         self.temp_c = temp_c

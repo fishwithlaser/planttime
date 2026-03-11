@@ -1,4 +1,5 @@
 adafruit-circuitpython-ads1x15
+adafruit-circuitpython-bme280
 adafruit-blinka
 pyserial
 influxdb-client

@@ -1,4 +1,6 @@
 sensors:
+  bme280:
+    i2c_address: 0x77
   ph:
     adc_channel: 0
     calibration:
@@ -9,6 +11,8 @@ sensors:
     calibration:
       k: 1.0
       offset: 0.0
+  water_temp:
+    enabled: true
   water_level:
     serial_port: /dev/serial0
     baud_rate: 9600

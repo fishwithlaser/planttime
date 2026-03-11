@@ -38,11 +38,9 @@ def init_adc(cfg):
 
 def read_avg_voltage(adc, channel: int) -> float:
     """Read average voltage over multiple samples."""
-    import adafruit_ads1x15.analog_in as AnalogIn
-    import adafruit_ads1x15.ads1115 as ADS
+    from adafruit_ads1x15.analog_in import AnalogIn
 
-    channels = [ADS.P0, ADS.P1, ADS.P2, ADS.P3]
-    analog_in = AnalogIn.AnalogIn(adc, channels[channel])
+    analog_in = AnalogIn(adc, channel)
 
     readings = []
     for i in range(SAMPLES):
