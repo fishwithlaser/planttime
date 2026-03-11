@@ -1,0 +1,33 @@
+sensors:
+  ph:
+    adc_channel: 0
+    calibration:
+      slope: -5.7
+      intercept: 21.34
+  ec:
+    adc_channel: 1
+    calibration:
+      k: 1.0
+      offset: 0.0
+  water_level:
+    serial_port: /dev/serial0
+    baud_rate: 9600
+    tank_height_mm: 300
+
+adc:
+  i2c_address: 0x48
+  gain: 1
+
+influxdb:
+  url: http://localhost:8086
+  token: ""
+  org: planttime
+  bucket: planttime
+
+read_interval_seconds: 10
+
+pumps:
+  nutrient_a: {gpio_pin: 17}
+  nutrient_b: {gpio_pin: 27}
+  ph_down: {gpio_pin: 22}
+  ph_up: {gpio_pin: 23}
