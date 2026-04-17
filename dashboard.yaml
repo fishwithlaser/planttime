@@ -16,6 +16,13 @@ spec:
       xPos: 0
       yPos: 0
       decimalPlaces: 2
+      axes:
+        - base: "10"
+          name: x
+          scale: linear
+        - base: "10"
+          name: y
+          scale: linear
       queries:
         - query: |-
             from(bucket: "planttime1")
@@ -39,6 +46,13 @@ spec:
       yPos: 0
       suffix: " mS/cm"
       decimalPlaces: 2
+      axes:
+        - base: "10"
+          name: x
+          scale: linear
+        - base: "10"
+          name: y
+          scale: linear
       queries:
         - query: |-
             from(bucket: "planttime1")
@@ -62,6 +76,13 @@ spec:
       yPos: 3
       suffix: " °C"
       decimalPlaces: 1
+      axes:
+        - base: "10"
+          name: x
+          scale: linear
+        - base: "10"
+          name: y
+          scale: linear
       queries:
         - query: |-
             from(bucket: "planttime1")
@@ -85,6 +106,13 @@ spec:
       yPos: 3
       suffix: " °C"
       decimalPlaces: 1
+      axes:
+        - base: "10"
+          name: x
+          scale: linear
+        - base: "10"
+          name: y
+          scale: linear
       queries:
         - query: |-
             from(bucket: "planttime1")
@@ -108,6 +136,13 @@ spec:
       yPos: 3
       suffix: " %"
       decimalPlaces: 0
+      axes:
+        - base: "10"
+          name: x
+          scale: linear
+        - base: "10"
+          name: y
+          scale: linear
       queries:
         - query: |-
             from(bucket: "planttime1")
@@ -131,6 +166,13 @@ spec:
       yPos: 3
       suffix: " mm"
       decimalPlaces: 0
+      axes:
+        - base: "10"
+          name: x
+          scale: linear
+        - base: "10"
+          name: y
+          scale: linear
       queries:
         - query: |-
             from(bucket: "planttime1")
@@ -154,6 +196,13 @@ spec:
       yPos: 6
       suffix: " hPa"
       decimalPlaces: 1
+      axes:
+        - base: "10"
+          name: x
+          scale: linear
+        - base: "10"
+          name: y
+          scale: linear
       queries:
         - query: |-
             from(bucket: "planttime1")
