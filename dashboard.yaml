@@ -16,14 +16,6 @@ spec:
       height: 3
       xPos: 0
       yPos: 0
-      axes:
-        - base: "10"
-          name: x
-          scale: linear
-        - base: "10"
-          name: y
-          scale: linear
-          suffix: " pH"
       queries:
         - query: |-
             from(bucket: "planttime1")
@@ -36,14 +28,6 @@ spec:
           name: Viridian
           type: scale
           hex: "#32B08C"
-        - id: mid
-          name: Ocean
-          type: scale
-          hex: "#4591ED"
-        - id: end
-          name: Pool
-          type: scale
-          hex: "#7A65F2"
     - kind: Xy
       name: EC (mS/cm)
       xCol: _time
@@ -54,14 +38,6 @@ spec:
       height: 3
       xPos: 6
       yPos: 0
-      axes:
-        - base: "10"
-          name: x
-          scale: linear
-        - base: "10"
-          name: y
-          scale: linear
-          suffix: " mS/cm"
       queries:
         - query: |-
             from(bucket: "planttime1")
@@ -74,14 +50,6 @@ spec:
           name: Solstice
           type: scale
           hex: "#FFB94A"
-        - id: mid
-          name: Ruby
-          type: scale
-          hex: "#F4CF31"
-        - id: end
-          name: Fire
-          type: scale
-          hex: "#DC4E58"
     - kind: Single_Stat_Plus_Line
       name: Water Temperature
       xCol: _time
@@ -184,14 +152,6 @@ spec:
       height: 3
       xPos: 0
       yPos: 6
-      axes:
-        - base: "10"
-          name: x
-          scale: linear
-        - base: "10"
-          name: y
-          scale: linear
-          suffix: " °C"
       queries:
         - query: |-
             from(bucket: "planttime1")
@@ -204,11 +164,3 @@ spec:
           name: laser
           type: scale
           hex: "#00C9FF"
-        - id: mid
-          name: pool
-          type: scale
-          hex: "#7CE490"
-        - id: end
-          name: honeydew
-          type: scale
-          hex: "#FFD400"
