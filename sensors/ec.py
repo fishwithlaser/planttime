@@ -25,9 +25,12 @@ class EcSensor:
     def read_voltage(self) -> float:
         """Read raw voltage from the EC probe.
 
-        Computes voltage manually from raw ADC to avoid a library
-        race condition when reading multiple channels.
+        Discards the first read and adds a settling delay to avoid
+        stale data from a previous channel.
         """
+        import time
+        _ = self.analog_in.value  # discard first read
+        time.sleep(0.05)
         raw = self.analog_in.value
         return raw * 4.096 / 32767
 

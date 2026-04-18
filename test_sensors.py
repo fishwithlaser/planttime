@@ -24,13 +24,23 @@ def read_bme280(i2c):
 
 def read_ads1115(i2c):
     try:
+        # Read each channel with its own AnalogIn and a small settling delay.
+        # The ADS1115 needs time to switch MUX channels; reading back-to-back
+        # can return stale data from the previous channel.
         adc = ADS.ADS1115(i2c)
+
         ph_chan = AnalogIn(adc, 0)
-        ec_chan = AnalogIn(adc, 1)
+        _ = ph_chan.value  # discard first read (may be stale)
+        time.sleep(0.05)
         ph_raw = ph_chan.value
         ph_volt = ph_raw * 4.096 / 32767
+
+        ec_chan = AnalogIn(adc, 1)
+        _ = ec_chan.value  # discard first read
+        time.sleep(0.05)
         ec_raw = ec_chan.value
         ec_volt = ec_raw * 4.096 / 32767
+
         print(f"  pH  (A0): {ph_volt:.4f} V  (raw: {ph_raw})")
         print(f"  EC  (A1): {ec_volt:.4f} V  (raw: {ec_raw})")
     except Exception as e:

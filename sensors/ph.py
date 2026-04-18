@@ -23,10 +23,13 @@ class PhSensor:
     def read_voltage(self) -> float:
         """Read raw voltage from the pH probe.
 
-        Computes voltage manually from the raw ADC value to avoid
-        a library bug where .voltage can return stale data when
-        reading multiple channels in rapid succession.
+        Discards the first read and adds a settling delay to avoid
+        stale data from a previous channel. Computes voltage manually
+        from the raw ADC value.
         """
+        import time
+        _ = self.analog_in.value  # discard first read
+        time.sleep(0.05)
         raw = self.analog_in.value
         return raw * 4.096 / 32767
 
