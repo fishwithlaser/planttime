@@ -25,7 +25,7 @@ spec:
           scale: linear
       queries:
         - query: |-
-            from(bucket: "planttime1")
+            from(bucket: "planttime")
               |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
               |> filter(fn: (r) => r["_measurement"] == "sensors")
               |> filter(fn: (r) => r["sensor_type"] == "ph")
@@ -55,7 +55,7 @@ spec:
           scale: linear
       queries:
         - query: |-
-            from(bucket: "planttime1")
+            from(bucket: "planttime")
               |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
               |> filter(fn: (r) => r["_measurement"] == "sensors")
               |> filter(fn: (r) => r["sensor_type"] == "ec")
@@ -85,7 +85,7 @@ spec:
           scale: linear
       queries:
         - query: |-
-            from(bucket: "planttime1")
+            from(bucket: "planttime")
               |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
               |> filter(fn: (r) => r["_measurement"] == "sensors")
               |> filter(fn: (r) => r["sensor_type"] == "water_temperature")
@@ -115,7 +115,7 @@ spec:
           scale: linear
       queries:
         - query: |-
-            from(bucket: "planttime1")
+            from(bucket: "planttime")
               |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
               |> filter(fn: (r) => r["_measurement"] == "sensors")
               |> filter(fn: (r) => r["sensor_type"] == "air_temperature")
@@ -145,7 +145,7 @@ spec:
           scale: linear
       queries:
         - query: |-
-            from(bucket: "planttime1")
+            from(bucket: "planttime")
               |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
               |> filter(fn: (r) => r["_measurement"] == "sensors")
               |> filter(fn: (r) => r["sensor_type"] == "humidity")
@@ -175,7 +175,7 @@ spec:
           scale: linear
       queries:
         - query: |-
-            from(bucket: "planttime1")
+            from(bucket: "planttime")
               |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
               |> filter(fn: (r) => r["_measurement"] == "sensors")
               |> filter(fn: (r) => r["sensor_type"] == "water_level")
@@ -205,7 +205,7 @@ spec:
           scale: linear
       queries:
         - query: |-
-            from(bucket: "planttime1")
+            from(bucket: "planttime")
               |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
               |> filter(fn: (r) => r["_measurement"] == "sensors")
               |> filter(fn: (r) => r["sensor_type"] == "pressure")
