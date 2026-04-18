@@ -27,8 +27,12 @@ def read_ads1115(i2c):
         adc = ADS.ADS1115(i2c)
         ph_chan = AnalogIn(adc, 0)
         ec_chan = AnalogIn(adc, 1)
-        print(f"  pH  (A0): {ph_chan.voltage:.4f} V  (raw: {ph_chan.value})")
-        print(f"  EC  (A1): {ec_chan.voltage:.4f} V  (raw: {ec_chan.value})")
+        ph_raw = ph_chan.value
+        ph_volt = ph_raw * 4.096 / 32767
+        ec_raw = ec_chan.value
+        ec_volt = ec_raw * 4.096 / 32767
+        print(f"  pH  (A0): {ph_volt:.4f} V  (raw: {ph_raw})")
+        print(f"  EC  (A1): {ec_volt:.4f} V  (raw: {ec_raw})")
     except Exception as e:
         print(f"  FAILED: {e}")
 

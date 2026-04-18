@@ -23,8 +23,13 @@ class EcSensor:
         self.temp_c = temp_c
 
     def read_voltage(self) -> float:
-        """Read raw voltage from the EC probe."""
-        return self.analog_in.voltage
+        """Read raw voltage from the EC probe.
+
+        Computes voltage manually from raw ADC to avoid a library
+        race condition when reading multiple channels.
+        """
+        raw = self.analog_in.value
+        return raw * 4.096 / 32767
 
     def read(self) -> float:
         """Read EC value in mS/cm with temperature compensation."""

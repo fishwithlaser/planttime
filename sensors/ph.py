@@ -21,8 +21,14 @@ class PhSensor:
         self.intercept = intercept
 
     def read_voltage(self) -> float:
-        """Read raw voltage from the pH probe."""
-        return self.analog_in.voltage
+        """Read raw voltage from the pH probe.
+
+        Computes voltage manually from the raw ADC value to avoid
+        a library bug where .voltage can return stale data when
+        reading multiple channels in rapid succession.
+        """
+        raw = self.analog_in.value
+        return raw * 4.096 / 32767
 
     def read(self) -> float:
         """Read pH value (0-14) using calibration coefficients."""
