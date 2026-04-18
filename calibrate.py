@@ -37,14 +37,22 @@ def init_adc(cfg):
 
 
 def read_avg_voltage(adc, channel: int) -> float:
-    """Read average voltage over multiple samples."""
+    """Read average voltage over multiple samples.
+
+    Uses raw -> manual voltage conversion with settling delay to avoid
+    the ADS1115 library's stale-data bug when switching channels.
+    """
     from adafruit_ads1x15.analog_in import AnalogIn
 
     analog_in = AnalogIn(adc, channel)
 
     readings = []
     for i in range(SAMPLES):
-        readings.append(analog_in.voltage)
+        _ = analog_in.value  # discard first read (stale)
+        time.sleep(0.05)
+        raw = analog_in.value
+        voltage = raw * 4.096 / 32767
+        readings.append(voltage)
         if i < SAMPLES - 1:
             time.sleep(SAMPLE_DELAY)
 
@@ -93,38 +101,39 @@ def calibrate_ph(adc, cfg):
 
 
 def calibrate_ec(adc, cfg):
-    """EC calibration using a known EC solution."""
+    """Two-point EC calibration using 1.413 mS/cm and 12.88 mS/cm solutions."""
     channel = cfg["sensors"]["ec"]["adc_channel"]
 
+    EC_LOW = 1.413   # mS/cm (low-range buffer)
+    EC_HIGH = 12.88  # mS/cm (high-range buffer)
+
     print("\n=== EC Calibration ===")
-    print("You'll need an EC calibration solution (e.g. 1.413 mS/cm).\n")
+    print(f"Two-point calibration using {EC_LOW} mS/cm and {EC_HIGH} mS/cm buffers.\n")
 
-    # Read in dry air (zero point)
-    input("Leave the EC probe in air (dry) and press Enter...")
+    # Point 1: low-range buffer
+    input(f"Rinse the EC probe, place it in the {EC_LOW} mS/cm buffer, and press Enter...")
     print(f"Reading {SAMPLES} samples...")
-    v_dry = read_avg_voltage(adc, channel)
+    v_low = read_avg_voltage(adc, channel)
 
-    # Read in calibration solution
-    known_ec = float(input("\nEnter the EC value of your calibration solution (mS/cm): "))
-    input(f"Place the EC probe in the {known_ec} mS/cm solution and press Enter...")
+    # Point 2: high-range buffer
+    input(f"\nRinse the EC probe, place it in the {EC_HIGH} mS/cm buffer, and press Enter...")
     print(f"Reading {SAMPLES} samples...")
-    v_cal = read_avg_voltage(adc, channel)
+    v_high = read_avg_voltage(adc, channel)
 
-    if abs(v_cal - v_dry) < 0.01:
+    if abs(v_high - v_low) < 0.01:
         print("ERROR: Voltages too similar. Check probe connection.")
         return
 
     # Linear: EC = k * voltage + offset
-    # In air: EC = 0, so offset = -k * v_dry
-    # In solution: known_ec = k * v_cal + offset
-    k = known_ec / (v_cal - v_dry)
-    offset = -k * v_dry
+    # Two points: (v_low, EC_LOW) and (v_high, EC_HIGH)
+    k = (EC_HIGH - EC_LOW) / (v_high - v_low)
+    offset = EC_LOW - k * v_low
 
     print(f"\nCalibration results:")
     print(f"  K:      {k:.4f}")
     print(f"  Offset: {offset:.4f}")
-    print(f"  Check: V={v_dry:.4f} -> EC {k * v_dry + offset:.2f} mS/cm (expect ~0.00)")
-    print(f"  Check: V={v_cal:.4f} -> EC {k * v_cal + offset:.2f} mS/cm (expect {known_ec:.2f})")
+    print(f"  Check: V={v_low:.4f} -> EC {k * v_low + offset:.3f} mS/cm (expect {EC_LOW})")
+    print(f"  Check: V={v_high:.4f} -> EC {k * v_high + offset:.3f} mS/cm (expect {EC_HIGH})")
 
     cfg["sensors"]["ec"]["calibration"]["k"] = round(k, 4)
     cfg["sensors"]["ec"]["calibration"]["offset"] = round(offset, 4)
