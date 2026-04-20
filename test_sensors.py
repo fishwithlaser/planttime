@@ -24,10 +24,14 @@ def read_bme280(i2c):
 
 def read_ads1115(i2c):
     try:
+        import yaml
+        cfg = yaml.safe_load(open("config.yaml"))
+        addr = cfg["adc"]["i2c_address"]
+
         # Read each channel with its own AnalogIn and a small settling delay.
         # The ADS1115 needs time to switch MUX channels; reading back-to-back
         # can return stale data from the previous channel.
-        adc = ADS.ADS1115(i2c)
+        adc = ADS.ADS1115(i2c, address=addr)
 
         ph_chan = AnalogIn(adc, 0)
         _ = ph_chan.value  # discard first read (may be stale)
