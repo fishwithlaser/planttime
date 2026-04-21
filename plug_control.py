@@ -17,8 +17,8 @@ BROADCAST_SPACE = "192.168.18.255"
 
 # Friendly names → MAC addresses
 PLUGS = {
-    "light": "cc4085b10db8",
-    "pump":  "cc4085b0d55c",
+    "light": "cc4085b0d55c",
+    "pump":  "cc4085b10db8",
 }
 
 
