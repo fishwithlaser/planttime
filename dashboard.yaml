@@ -190,7 +190,7 @@ spec:
       xCol: _time
       yCol: _value
       position: overlaid
-      width: 12
+      width: 6
       height: 3
       xPos: 0
       yPos: 6
@@ -215,3 +215,73 @@ spec:
           name: ruby
           type: text
           hex: "#DC4E58"
+    - kind: Single_Stat_Plus_Line
+      name: Pump state
+      xCol: _time
+      yCol: _value
+      position: overlaid
+      width: 6
+      height: 3
+      xPos: 6
+      yPos: 6
+      decimalPlaces: 0
+      axes:
+        - base: "10"
+          name: x
+          scale: linear
+        - base: "10"
+          name: y
+          scale: linear
+      queries:
+        - query: |-
+            from(bucket: "planttime")
+              |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+              |> filter(fn: (r) => r["_measurement"] == "plug_state")
+              |> filter(fn: (r) => r["plug"] == "pump")
+              |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)
+      colors:
+        - id: base
+          name: pool
+          type: text
+          hex: "#00C9FF"
+    - kind: Xy
+      name: pH vs Pump state
+      xCol: _time
+      yCol: _value
+      position: overlaid
+      geom: line
+      width: 12
+      height: 4
+      xPos: 0
+      yPos: 9
+      axes:
+        - base: "10"
+          name: x
+          scale: linear
+        - base: "10"
+          name: y
+          scale: linear
+      queries:
+        - query: |-
+            pH = from(bucket: "planttime")
+              |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+              |> filter(fn: (r) => r["_measurement"] == "sensors" and r["sensor_type"] == "ph")
+              |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+              |> map(fn: (r) => ({ r with _field: "pH" }))
+
+            pump = from(bucket: "planttime")
+              |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+              |> filter(fn: (r) => r["_measurement"] == "plug_state" and r["plug"] == "pump")
+              |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)
+              |> map(fn: (r) => ({ r with _value: float(v: r._value) * 8.0, _field: "pump x8" }))
+
+            union(tables: [pH, pump])
+      colors:
+        - id: base
+          name: viridian
+          type: scale
+          hex: "#32B08C"
+        - id: mid
+          name: laser
+          type: scale
+          hex: "#00C9FF"
