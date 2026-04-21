@@ -65,6 +65,64 @@ spec:
           name: solstice
           type: text
           hex: "#FFB94A"
+    - kind: Xy
+      name: Pump (0=off, 1=on)
+      xCol: _time
+      yCol: _value
+      position: overlaid
+      geom: step
+      width: 6
+      height: 2
+      xPos: 0
+      yPos: 3
+      axes:
+        - base: "10"
+          name: x
+          scale: linear
+        - base: "10"
+          name: y
+          scale: linear
+      queries:
+        - query: |-
+            from(bucket: "planttime")
+              |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+              |> filter(fn: (r) => r["_measurement"] == "plug_state")
+              |> filter(fn: (r) => r["plug"] == "pump")
+              |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)
+      colors:
+        - id: base
+          name: pool
+          type: scale
+          hex: "#00C9FF"
+    - kind: Xy
+      name: Light (0=off, 1=on)
+      xCol: _time
+      yCol: _value
+      position: overlaid
+      geom: step
+      width: 6
+      height: 2
+      xPos: 6
+      yPos: 3
+      axes:
+        - base: "10"
+          name: x
+          scale: linear
+        - base: "10"
+          name: y
+          scale: linear
+      queries:
+        - query: |-
+            from(bucket: "planttime")
+              |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+              |> filter(fn: (r) => r["_measurement"] == "plug_state")
+              |> filter(fn: (r) => r["plug"] == "light")
+              |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)
+      colors:
+        - id: base
+          name: solstice
+          type: scale
+          hex: "#FFB94A"
     - kind: Single_Stat_Plus_Line
       name: Water Temperature
       xCol: _time
@@ -73,7 +131,7 @@ spec:
       width: 3
       height: 3
       xPos: 0
-      yPos: 3
+      yPos: 5
       suffix: " °C"
       decimalPlaces: 1
       axes:
@@ -103,7 +161,7 @@ spec:
       width: 3
       height: 3
       xPos: 3
-      yPos: 3
+      yPos: 5
       suffix: " °C"
       decimalPlaces: 1
       axes:
@@ -133,7 +191,7 @@ spec:
       width: 3
       height: 3
       xPos: 6
-      yPos: 3
+      yPos: 5
       suffix: " %"
       decimalPlaces: 0
       axes:
@@ -163,7 +221,7 @@ spec:
       width: 3
       height: 3
       xPos: 9
-      yPos: 3
+      yPos: 5
       suffix: " mm"
       decimalPlaces: 0
       axes:
@@ -190,10 +248,10 @@ spec:
       xCol: _time
       yCol: _value
       position: overlaid
-      width: 6
+      width: 12
       height: 3
       xPos: 0
-      yPos: 6
+      yPos: 8
       suffix: " hPa"
       decimalPlaces: 1
       axes:
@@ -215,61 +273,3 @@ spec:
           name: ruby
           type: text
           hex: "#DC4E58"
-    - kind: Xy
-      name: Pump (0=off, 1=on)
-      xCol: _time
-      yCol: _value
-      position: overlaid
-      geom: step
-      width: 6
-      height: 3
-      xPos: 6
-      yPos: 6
-      axes:
-        - base: "10"
-          name: x
-          scale: linear
-        - base: "10"
-          name: y
-          scale: linear
-      queries:
-        - query: |-
-            from(bucket: "planttime")
-              |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
-              |> filter(fn: (r) => r["_measurement"] == "plug_state")
-              |> filter(fn: (r) => r["plug"] == "pump")
-              |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)
-      colors:
-        - id: base
-          name: pool
-          type: scale
-          hex: "#00C9FF"
-    - kind: Xy
-      name: Light (0=off, 1=on)
-      xCol: _time
-      yCol: _value
-      position: overlaid
-      geom: step
-      width: 12
-      height: 3
-      xPos: 0
-      yPos: 9
-      axes:
-        - base: "10"
-          name: x
-          scale: linear
-        - base: "10"
-          name: y
-          scale: linear
-      queries:
-        - query: |-
-            from(bucket: "planttime")
-              |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
-              |> filter(fn: (r) => r["_measurement"] == "plug_state")
-              |> filter(fn: (r) => r["plug"] == "light")
-              |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)
-      colors:
-        - id: base
-          name: solstice
-          type: scale
-          hex: "#FFB94A"
